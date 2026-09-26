@@ -1,7 +1,7 @@
 {
     "id": "profile",
     "schemaVersion": 1,
-    "title": "Diwali EOSS",
+    "title": "SDUI User",
     "showHeader": true,
     "showBack": false,
     "refreshable": true,
@@ -37,6 +37,37 @@
         "children": [
             {
                 "type": "card",
+                "animation": { "enter": "zoomIn", "duration": 300, "spring": true },
+                "style": { "backgroundColor": "$secondary", "padding": 20, "gap": 6 },
+                "children": [
+                    {
+                        "type": "row",
+                        "style": { "gap": 8 },
+                        "children": [
+                            { "type": "text", "props": { "text": "🪔 Diwali EOSS" }, "style": { "flex": 1, "font": "bold", "fontSize": 20, "color": "$white" } },
+                            { "type": "text", "animation": { "loop": "float", "loopDuration": 1400 }, "props": { "text": "🎁" }, "style": { "fontSize": 22 } },
+                            {
+                                "type": "card",
+                                "animation": { "loop": "pulse", "loopDuration": 900 },
+                                "style": { "backgroundColor": "$warning", "paddingVertical": 4, "paddingHorizontal": 10, "borderRadius": 20 },
+                                "children": [
+                                    { "type": "text", "props": { "text": "SALE" }, "style": { "font": "bold", "fontSize": 12, "color": "$white" } }
+                                ]
+                            }
+                        ]
+                    },
+                    { "type": "text", "props": { "text": "Up to 50% OFF on everything" }, "style": { "color": "$white" } },
+                    {
+                        "type": "text",
+                        "animation": { "loop": "blink", "loopDuration": 1600 },
+                        "props": { "text": "Ends tonight!" },
+                        "style": { "font": "medium", "fontSize": 12, "color": "$white" }
+                    }
+                ]
+            },
+            {
+                "type": "card",
+                "animation": { "enter": "fadeInDown", "delay": 150 },
                 "style": { "alignItems": "center", "gap": 8, "padding": 20 },
                 "children": [
                     {
@@ -60,6 +91,7 @@
                 "children": [
                     {
                         "type": "card",
+                        "animation": { "enter": "fadeInUp", "delay": 300, "stagger": 120, "spring": true },
                         "style": { "flex": 1, "alignItems": "center" },
                         "children": [
                             { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "$primary" } },
@@ -70,6 +102,7 @@
             },
             {
                 "type": "card",
+                "animation": { "enter": "fadeInDown", "delay": 650 },
                 "style": { "gap": 12 },
                 "children": [
                     { "type": "text", "props": { "text": "User form" }, "style": { "font": "bold", "fontSize": 16 } },
@@ -128,6 +161,7 @@
             },
             {
                 "type": "card",
+                "animation": { "enter": "fadeInDown", "delay": 750 },
                 "style": { "gap": 12 },
                 "children": [
                     { "type": "text", "props": { "text": "POST API demo" }, "style": { "font": "bold", "fontSize": 16 } },
@@ -177,6 +211,7 @@
             },
             {
                 "type": "card",
+                "animation": { "enter": "slideInRight", "delay": 850 },
                 "style": { "padding": 0 },
                 "children": [
                     {
@@ -204,6 +239,48 @@
                                 ]
                             }
                         ]
+                    }
+                ]
+            },
+            {
+                "type": "row",
+                "style": { "gap": 12, "marginBottom": 24 },
+                "children": [
+                    {
+                        "type": "button",
+                        "animation": { "enter": "fadeInUp", "delay": 950 },
+                        "props": { "title": "🛍️ Shop Sale" },
+                        "style": {
+                            "flex": 1,
+                            "width": "auto",
+                            "backgroundColor": "$secondary",
+                            "borderColor": "$secondary",
+                            "borderRadius": 24,
+                            "height": 50,
+                            "shadowColor": "#CD0105",
+                            "shadowOpacity": 0.35,
+                            "shadowRadius": 8,
+                            "shadowOffset": { "width": 0, "height": 4 },
+                            "elevation": 6
+                        },
+                        "textStyle": { "color": "$white", "font": "bold", "fontSize": 15 },
+                        "action": { "type": "navigate", "screen": "Home" }
+                    },
+                    {
+                        "type": "button",
+                        "animation": { "enter": "fadeInUp", "delay": 1050 },
+                        "props": { "title": "Copy email" },
+                        "style": {
+                            "flex": 1,
+                            "width": "auto",
+                            "backgroundColor": "$transparent",
+                            "borderColor": "$primary",
+                            "borderWidth": 2,
+                            "borderRadius": 8,
+                            "height": 50
+                        },
+                        "textStyle": { "color": "$primary", "font": "semiBold", "fontSize": 15 },
+                        "action": { "type": "copy", "text": "{{data.user.email}}" }
                     }
                 ]
             }

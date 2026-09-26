@@ -17,6 +17,7 @@ import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { runAction, SduiAction } from './actions';
 import { isVisible, resolveDeep, SduiScope } from './binding';
+import SduiAnimated, { SduiAnimation, splitLayoutStyle } from './SduiAnimated';
 import { resolveStyle } from './styleResolver';
 
 /** One node of the UI tree sent by the server */
@@ -29,6 +30,10 @@ export interface SduiNode {
     action?: SduiAction;
     /** Binding path; the node is hidden when its value is empty (prefix `!` to invert) */
     visibleIf?: string;
+    /** Enter / loop animation, e.g. `{ "enter": "fadeInUp", "stagger": 100 }` */
+    animation?: SduiAnimation;
+    /** Text style for components with a label (e.g. `button`); supports `$tokens` and `font` */
+    textStyle?: Record<string, any>;
 }
 
 interface SduiRendererProps {
@@ -55,7 +60,11 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
     if (!node || !isVisible(node.visibleIf, scope)) return null;
 
     const props = resolveDeep(node.props ?? {}, scope);
-    const style = resolveStyle(node.style, theme, isRTL);
+    // With an animation, the wrapper takes the node's place in the layout (margins, flex...)
+    const resolvedStyle = resolveStyle(node.style, theme, isRTL);
+    const { wrapper: wrapperStyle, inner: style } = node.animation
+        ? splitLayoutStyle(resolvedStyle)
+        : { wrapper: undefined, inner: resolvedStyle };
     const onPress = node.action
         ? () => runAction(node.action as SduiAction, { scope, navigation: navigation as any, setState })
         : undefined;
@@ -75,122 +84,134 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
             <View style={boxStyle}>{content}</View>
         );
 
-    switch (node.type) {
-        case 'column':
-            return renderBox(style, renderChildren());
+    const renderContent = () => {
+        switch (node.type) {
+            case 'column':
+                return renderBox(style, renderChildren());
 
-        case 'row':
-            // Children side by side; reversed for Arabic (RTL)
-            return renderBox(
-                [styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style],
-                renderChildren(),
-            );
+            case 'row':
+                // Children side by side; reversed for Arabic (RTL)
+                return renderBox(
+                    [styles.row, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style],
+                    renderChildren(),
+                );
 
-        case 'card':
-            return renderBox(
-                [styles.card, { backgroundColor: colors.surface }, style],
-                renderChildren(),
-            );
+            case 'card':
+                return renderBox(
+                    [styles.card, { backgroundColor: colors.surface }, style],
+                    renderChildren(),
+                );
 
-        case 'text':
-            return (
-                <TextComp
-                    isDynamic
-                    text={props.text == null ? '' : String(props.text)}
-                    numberOfLines={props.numberOfLines}
-                    style={style}
-                    onPress={onPress}
-                />
-            );
+            case 'text':
+                return (
+                    <TextComp
+                        isDynamic
+                        text={props.text == null ? '' : String(props.text)}
+                        numberOfLines={props.numberOfLines}
+                        style={style}
+                        onPress={onPress}
+                    />
+                );
 
-        case 'button':
-            return (
-                <ButtonComp
-                    title={props.title == null ? '' : String(props.title)}
-                    variant={props.variant}
-                    disabled={!!props.disabled || !onPress}
-                    onPress={onPress ?? (() => { })}
-                    style={style}
-                />
-            );
+            case 'button':
+                return (
+                    <ButtonComp
+                        title={props.title == null ? '' : String(props.title)}
+                        variant={props.variant}
+                        disabled={!!props.disabled || !onPress}
+                        onPress={onPress ?? (() => { })}
+                        style={style}
+                        textStyle={resolveStyle(node.textStyle, theme, isRTL)}
+                    />
+                );
 
-        case 'input':
-            // Two-way binding: shows state[bind] and writes every change back to it
-            return (
-                <TextInputComp
-                    value={props.bind ? String(scope.state?.[props.bind] ?? '') : undefined}
-                    onChangeText={text => props.bind && setState(props.bind, text)}
-                    placeholder={props.placeholder}
-                    keyboardType={props.keyboardType}
-                    autoCapitalize={props.autoCapitalize ?? 'none'}
-                    autoCorrect={false}
-                    secureTextEntry={!!props.secure}
-                    containerStyle={style}
-                />
-            );
+            case 'input':
+                // Two-way binding: shows state[bind] and writes every change back to it
+                return (
+                    <TextInputComp
+                        value={props.bind ? String(scope.state?.[props.bind] ?? '') : undefined}
+                        onChangeText={text => props.bind && setState(props.bind, text)}
+                        placeholder={props.placeholder}
+                        keyboardType={props.keyboardType}
+                        autoCapitalize={props.autoCapitalize ?? 'none'}
+                        autoCorrect={false}
+                        secureTextEntry={!!props.secure}
+                        containerStyle={style}
+                    />
+                );
 
-        case 'select': {
-            // Single choice chips; the chosen option's value is saved in state[bind]
-            const options: { label: string; value: string }[] = Array.isArray(props.options) ? props.options : [];
-            const selected = scope.state?.[props.bind];
-            return (
-                <View style={[styles.selectRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style]}>
-                    {options.map(option => {
-                        const isSelected = option.value === selected;
-                        return (
-                            <Pressable
-                                key={option.value}
-                                onPress={() => props.bind && setState(props.bind, option.value)}
-                                style={[
-                                    styles.option,
-                                    { backgroundColor: colors.surface, borderColor: colors.inputBorder },
-                                    isSelected && styles.optionSelected,
-                                ]}
-                            >
-                                <TextComp
-                                    isDynamic
-                                    text={option.label}
-                                    style={[styles.optionText, isSelected && styles.optionTextSelected]}
-                                />
-                            </Pressable>
-                        );
-                    })}
-                </View>
-            );
+            case 'select': {
+                // Single choice chips; the chosen option's value is saved in state[bind]
+                const options: { label: string; value: string }[] = Array.isArray(props.options) ? props.options : [];
+                const selected = scope.state?.[props.bind];
+                return (
+                    <View style={[styles.selectRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style]}>
+                        {options.map(option => {
+                            const isSelected = option.value === selected;
+                            return (
+                                <Pressable
+                                    key={option.value}
+                                    onPress={() => props.bind && setState(props.bind, option.value)}
+                                    style={[
+                                        styles.option,
+                                        { backgroundColor: colors.surface, borderColor: colors.inputBorder },
+                                        isSelected && styles.optionSelected,
+                                    ]}
+                                >
+                                    <TextComp
+                                        isDynamic
+                                        text={option.label}
+                                        style={[styles.optionText, isSelected && styles.optionTextSelected]}
+                                    />
+                                </Pressable>
+                            );
+                        })}
+                    </View>
+                );
+            }
+
+            case 'image':
+                return renderBox(
+                    undefined,
+                    <Image
+                        source={{ uri: props.uri }}
+                        style={[styles.image, style]}
+                        contentFit={props.contentFit ?? 'cover'}
+                        transition={200}
+                    />,
+                );
+
+            case 'divider':
+                return <View style={[styles.divider, { backgroundColor: colors.inputBorder }, style]} />;
+
+            case 'list': {
+                // Repeats the children once per item; children read `{{item.*}}` and `{{index}}`
+                const items: any[] = Array.isArray(props.items) ? props.items : [];
+                return (
+                    <View style={style}>
+                        {items.map((item, index) => (
+                            <React.Fragment key={item?.id ?? index}>
+                                {renderChildren({ ...scope, item, index })}
+                            </React.Fragment>
+                        ))}
+                    </View>
+                );
+            }
+
+            default:
+                if (__DEV__) console.warn('SDUI: unknown component', node.type);
+                return null;
         }
+    };
 
-        case 'image':
-            return renderBox(
-                undefined,
-                <Image
-                    source={{ uri: props.uri }}
-                    style={[styles.image, style]}
-                    contentFit={props.contentFit ?? 'cover'}
-                    transition={200}
-                />,
-            );
+    const content = renderContent();
+    if (!node.animation || !content) return content;
 
-        case 'divider':
-            return <View style={[styles.divider, { backgroundColor: colors.inputBorder }, style]} />;
-
-        case 'list': {
-            // Repeats the children once per item; children read `{{item.*}}` and `{{index}}`
-            const items: any[] = Array.isArray(props.items) ? props.items : [];
-            return (
-                <View style={style}>
-                    {items.map((item, index) => (
-                        <React.Fragment key={item?.id ?? index}>
-                            {renderChildren({ ...scope, item, index })}
-                        </React.Fragment>
-                    ))}
-                </View>
-            );
-        }
-
-        default:
-            if (__DEV__) console.warn('SDUI: unknown component', node.type);
-            return null;
-    }
+    return (
+        <SduiAnimated animation={node.animation} index={scope.index} style={wrapperStyle}>
+            {content}
+        </SduiAnimated>
+    );
 };
 
 const styles = StyleSheet.create({
