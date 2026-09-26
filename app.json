@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "expo_boilerplate",
-    "slug": "expo_boilerplate",
+    "name": "MyApp",
+    "slug": "myapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +13,7 @@
     "ios": {
       "supportsTablet": true,
       "buildNumber": "1.0.0",
-      "bundleIdentifier": "boilerplate.expo",
+      "bundleIdentifier": "com.anExpoApp.my",
       "googleServicesFile": "./GoogleService-Info.plist",
       "entitlements": {
         "aps-environment": "production"
@@ -28,7 +28,7 @@
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "allowBackup": false,
-      "package": "boilerplate.expo",
+      "package": "com.anExpoApp.my",
       "predictiveBackGestureEnabled": false,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

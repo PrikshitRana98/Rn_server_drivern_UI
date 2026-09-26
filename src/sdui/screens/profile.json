@@ -1,0 +1,95 @@
+{
+    "id": "profile",
+    "schemaVersion": 1,
+    "title": "PROFILE",
+    "showHeader": true,
+    "showBack": false,
+    "refreshable": true,
+    "data": {
+        "user": {
+            "name": "Rick Sanchez",
+            "email": "rick@citadel.com",
+            "avatar": "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
+        },
+        "stats": [
+            { "id": "s1", "label": "Adventures", "value": "128" },
+            { "id": "s2", "label": "Dimensions", "value": "42" },
+            { "id": "s3", "label": "Portals", "value": "9k" }
+        ],
+        "menu": [
+            { "id": "m1", "title": "About this screen", "screenId": "about" },
+            { "id": "m2", "title": "Characters", "route": "Home" }
+        ]
+    },
+    "root": {
+        "type": "column",
+        "style": { "padding": 16, "gap": 16 },
+        "children": [
+            {
+                "type": "card",
+                "style": { "alignItems": "center", "gap": 8, "padding": 20 },
+                "children": [
+                    {
+                        "type": "image",
+                        "props": { "uri": "{{data.user.avatar}}" },
+                        "style": { "width": 96, "height": 96, "borderRadius": 48 }
+                    },
+                    { "type": "text", "props": { "text": "{{data.user.name}}" }, "style": { "font": "bold", "fontSize": 20 } },
+                    {
+                        "type": "text",
+                        "props": { "text": "{{data.user.email}}" },
+                        "style": { "color": "$textSecondary" },
+                        "action": { "type": "copy", "text": "{{data.user.email}}" }
+                    }
+                ]
+            },
+            {
+                "type": "list",
+                "props": { "items": "{{data.stats}}" },
+                "style": { "flexDirection": "row", "gap": 8 },
+                "children": [
+                    {
+                        "type": "card",
+                        "style": { "flex": 1, "alignItems": "center" },
+                        "children": [
+                            { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "$primary" } },
+                            { "type": "text", "props": { "text": "{{item.label}}" }, "style": { "fontSize": 12, "color": "$textSecondary" } }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "card",
+                "style": { "padding": 0 },
+                "children": [
+                    {
+                        "type": "list",
+                        "props": { "items": "{{data.menu}}" },
+                        "children": [
+                            {
+                                "type": "row",
+                                "visibleIf": "item.screenId",
+                                "style": { "padding": 16, "justifyContent": "space-between" },
+                                "action": { "type": "openScreen", "screenId": "{{item.screenId}}" },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{item.title}}" }, "style": { "font": "medium" } },
+                                    { "type": "text", "props": { "text": "›" }, "style": { "fontSize": 18, "color": "$textSecondary" } }
+                                ]
+                            },
+                            {
+                                "type": "row",
+                                "visibleIf": "item.route",
+                                "style": { "padding": 16, "justifyContent": "space-between" },
+                                "action": { "type": "navigate", "screen": "{{item.route}}" },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{item.title}}" }, "style": { "font": "medium" } },
+                                    { "type": "text", "props": { "text": "›" }, "style": { "fontSize": 18, "color": "$textSecondary" } }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
