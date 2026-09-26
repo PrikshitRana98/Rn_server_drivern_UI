@@ -17,6 +17,7 @@ export type SduiAction =
      * Calls an API. The response is saved in `state[resultKey]`, so the JSON can show it
      * with `{{state.<resultKey>.*}}`. `loadingKey` is true while the request runs and
      * `errorKey` holds the error message if it fails.
+     * `validate` checks state values before sending, e.g. `{ "email": "email", "gender": "required" }`.
      */
     | {
         type: 'api';
@@ -26,7 +27,25 @@ export type SduiAction =
         resultKey?: string;
         loadingKey?: string;
         errorKey?: string;
+        validate?: Record<string, ValidationRule>;
     };
+
+type ValidationRule = 'required' | 'email';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Returns the first validation error message, or null when every field is valid.
+ */
+const validateState = (rules: Record<string, ValidationRule> | undefined, state: Record<string, any> = {}) => {
+    if (!rules) return null;
+    for (const field of Object.keys(rules)) {
+        const value = String(state[field] ?? '').trim();
+        if (!value) return t('FIELD_REQUIRED', { field });
+        if (rules[field] === 'email' && !EMAIL_REGEX.test(value)) return t('INVALID_EMAIL');
+    }
+    return null;
+};
 
 /** Everything an action needs from the screen */
 export interface ActionRuntime {
@@ -54,7 +73,15 @@ export const runAction = async (action: SduiAction, { scope, navigation, setStat
                 break;
 
             case 'api': {
-                const { method = 'post', url, body, resultKey, loadingKey, errorKey } = resolved;
+                const { method = 'post', url, body, resultKey, loadingKey, errorKey, validate } = resolved;
+
+                const validationError = validateState(validate, scope.state);
+                if (validationError) {
+                    if (errorKey) setState(errorKey, validationError);
+                    else Alert.alert(validationError);
+                    break;
+                }
+
                 if (loadingKey) setState(loadingKey, true);
                 if (errorKey) setState(errorKey, null);
 

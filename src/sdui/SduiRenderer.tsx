@@ -9,9 +9,11 @@ import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import ButtonComp from '@/components/ButtonComp';
 import TextComp from '@/components/TextComp';
+import TextInputComp from '@/components/TextInputComp';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
-import { Colors } from '@/styles/colors';
+import { Colors, commonColors } from '@/styles/colors';
+import fontFamily from '@/styles/fontFamily';
 import { moderateScale } from '@/styles/scaling';
 import { runAction, SduiAction } from './actions';
 import { isVisible, resolveDeep, SduiScope } from './binding';
@@ -112,6 +114,51 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
                 />
             );
 
+        case 'input':
+            // Two-way binding: shows state[bind] and writes every change back to it
+            return (
+                <TextInputComp
+                    value={props.bind ? String(scope.state?.[props.bind] ?? '') : undefined}
+                    onChangeText={text => props.bind && setState(props.bind, text)}
+                    placeholder={props.placeholder}
+                    keyboardType={props.keyboardType}
+                    autoCapitalize={props.autoCapitalize ?? 'none'}
+                    autoCorrect={false}
+                    secureTextEntry={!!props.secure}
+                    containerStyle={style}
+                />
+            );
+
+        case 'select': {
+            // Single choice chips; the chosen option's value is saved in state[bind]
+            const options: { label: string; value: string }[] = Array.isArray(props.options) ? props.options : [];
+            const selected = scope.state?.[props.bind];
+            return (
+                <View style={[styles.selectRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }, style]}>
+                    {options.map(option => {
+                        const isSelected = option.value === selected;
+                        return (
+                            <Pressable
+                                key={option.value}
+                                onPress={() => props.bind && setState(props.bind, option.value)}
+                                style={[
+                                    styles.option,
+                                    { backgroundColor: colors.surface, borderColor: colors.inputBorder },
+                                    isSelected && styles.optionSelected,
+                                ]}
+                            >
+                                <TextComp
+                                    isDynamic
+                                    text={option.label}
+                                    style={[styles.optionText, isSelected && styles.optionTextSelected]}
+                                />
+                            </Pressable>
+                        );
+                    })}
+                </View>
+            );
+        }
+
         case 'image':
             return renderBox(
                 undefined,
@@ -167,6 +214,28 @@ const styles = StyleSheet.create({
     divider: {
         height: StyleSheet.hairlineWidth,
         width: '100%',
+    },
+    selectRow: {
+        gap: moderateScale(8),
+        flexWrap: 'wrap',
+    },
+    option: {
+        flex: 1,
+        alignItems: 'center',
+        paddingVertical: moderateScale(10),
+        paddingHorizontal: moderateScale(12),
+        borderRadius: moderateScale(10),
+        borderWidth: 1,
+    },
+    optionSelected: {
+        backgroundColor: commonColors.primary,
+        borderColor: commonColors.primary,
+    },
+    optionText: {
+        fontFamily: fontFamily.medium,
+    },
+    optionTextSelected: {
+        color: commonColors.white,
     },
     pressed: {
         opacity: 0.6,

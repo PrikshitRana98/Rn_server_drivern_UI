@@ -8,7 +8,12 @@
     "state": {
         "user": null,
         "loading": false,
-        "error": null
+        "error": null,
+        "email": "",
+        "gender": "",
+        "formResult": null,
+        "formLoading": false,
+        "formError": null
     },
     "data": {
         "user": {
@@ -59,6 +64,64 @@
                         "children": [
                             { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "$primary" } },
                             { "type": "text", "props": { "text": "{{item.label}}" }, "style": { "fontSize": 12, "color": "$textSecondary" } }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "card",
+                "style": { "gap": 12 },
+                "children": [
+                    { "type": "text", "props": { "text": "User form" }, "style": { "font": "bold", "fontSize": 16 } },
+                    { "type": "text", "props": { "text": "Email" }, "style": { "font": "medium" } },
+                    {
+                        "type": "input",
+                        "props": { "bind": "email", "placeholder": "Enter your email", "keyboardType": "email-address" }
+                    },
+                    { "type": "text", "props": { "text": "Gender" }, "style": { "font": "medium" } },
+                    {
+                        "type": "select",
+                        "props": {
+                            "bind": "gender",
+                            "options": [
+                                { "label": "Male", "value": "male" },
+                                { "label": "Female", "value": "female" },
+                                { "label": "Other", "value": "other" }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "visibleIf": "state.email",
+                        "props": { "text": "You typed: {{state.email}} · {{state.gender}}" },
+                        "style": { "fontSize": 12, "color": "$textSecondary" }
+                    },
+                    {
+                        "type": "button",
+                        "props": { "title": "Submit", "disabled": "{{state.formLoading}}" },
+                        "action": {
+                            "type": "api",
+                            "method": "post",
+                            "url": "https://dummyjson.com/users/add",
+                            "body": { "email": "{{state.email}}", "gender": "{{state.gender}}" },
+                            "validate": { "email": "email", "gender": "required" },
+                            "resultKey": "formResult",
+                            "loadingKey": "formLoading",
+                            "errorKey": "formError"
+                        }
+                    },
+                    { "type": "text", "visibleIf": "state.formLoading", "props": { "text": "Submitting..." }, "style": { "color": "$textSecondary" } },
+                    { "type": "text", "visibleIf": "state.formError", "props": { "text": "{{state.formError}}" }, "style": { "color": "$error" } },
+                    {
+                        "type": "column",
+                        "visibleIf": "state.formResult",
+                        "style": { "gap": 4 },
+                        "children": [
+                            { "type": "divider" },
+                            { "type": "text", "props": { "text": "✅ User created (POST response)" }, "style": { "font": "bold", "color": "$primary" } },
+                            { "type": "text", "props": { "text": "ID: {{state.formResult.id}}" } },
+                            { "type": "text", "props": { "text": "Email: {{state.formResult.email}}" } },
+                            { "type": "text", "props": { "text": "Gender: {{state.formResult.gender}}" } }
                         ]
                     }
                 ]

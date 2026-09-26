@@ -43,5 +43,7 @@
     "PROFILE": "Profile",
     "Sdui": "SDUI",
     "SDUI": "SDUI",
-    "COPIED": "Copied to clipboard"
+    "COPIED": "Copied to clipboard",
+    "FIELD_REQUIRED": "Please fill {{field}}",
+    "INVALID_EMAIL": "Please enter a valid email"
 }
