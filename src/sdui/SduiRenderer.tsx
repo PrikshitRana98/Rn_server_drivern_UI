@@ -3,8 +3,8 @@
  * @description Converts a server driven UI node (JSON) into native components.
  * Calls itself for `children`, so any depth of nesting works.
  */
-import React from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import React, { createContext, useContext } from 'react';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import ButtonComp from '@/components/ButtonComp';
@@ -36,6 +36,33 @@ export interface SduiNode {
     textStyle?: Record<string, any>;
 }
 
+/** Direction of the nearest scrolling parent, so nested lists don't fight over scrolling */
+type ScrollDirection = 'vertical' | 'horizontal' | null;
+const ScrollDirectionContext = createContext<ScrollDirection>(null);
+
+/**
+ * Wrap SDUI content with this when it sits inside a ScrollView.
+ *
+ * @example
+ * <ScrollView><SduiScrollProvider value="vertical"><SduiRenderer ... /></SduiScrollProvider></ScrollView>
+ */
+export const SduiScrollProvider = ScrollDirectionContext.Provider;
+
+/** Style keys that size/place the FlatList itself; the rest styles its content */
+const LIST_OUTER_KEYS = [
+    'flex', 'flexGrow', 'height', 'maxHeight', 'minHeight', 'width', 'alignSelf',
+    'margin', 'marginHorizontal', 'marginVertical', 'marginTop', 'marginBottom', 'marginStart', 'marginEnd',
+];
+
+const splitListStyle = (style: Record<string, any> | undefined) => {
+    const outer: Record<string, any> = {};
+    const content: Record<string, any> = {};
+    Object.keys(style ?? {}).forEach(key => {
+        (LIST_OUTER_KEYS.includes(key) ? outer : content)[key] = style![key];
+    });
+    return { outer, content };
+};
+
 interface SduiRendererProps {
     node: SduiNode;
     /** Values for `{{...}}` bindings, e.g. `{ data: screen.data, state }` */
@@ -56,12 +83,16 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
     const colors = Colors[theme];
     const isRTL = useIsRTL();
     const navigation = useNavigation();
+    const parentScroll = useContext(ScrollDirectionContext);
 
     if (!node || !isVisible(node.visibleIf, scope)) return null;
 
     const props = resolveDeep(node.props ?? {}, scope);
     // With an animation, the wrapper takes the node's place in the layout (margins, flex...)
-    const resolvedStyle = resolveStyle(node.style, theme, isRTL);
+    const resolvedStyle = node.type === 'image'
+        // Default size is part of the node style, so wrappers (animation, Pressable) get it too
+        ? { width: '100%', height: moderateScale(160), ...resolveStyle(node.style, theme, isRTL) }
+        : resolveStyle(node.style, theme, isRTL);
     const { wrapper: wrapperStyle, inner: style } = node.animation
         ? splitLayoutStyle(resolvedStyle)
         : { wrapper: undefined, inner: resolvedStyle };
@@ -170,16 +201,19 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
                 );
             }
 
-            case 'image':
-                return renderBox(
-                    undefined,
+            case 'image': {
+                const image = (
                     <Image
                         source={{ uri: props.uri }}
                         style={[styles.image, style]}
                         contentFit={props.contentFit ?? 'cover'}
                         transition={200}
-                    />,
+                    />
                 );
+                // Only wrap when tappable; the wrapper takes the image's width so '100%' still works
+                if (!onPress) return image;
+                return renderBox({ width: style?.width, alignSelf: style?.alignSelf }, image);
+            }
 
             case 'divider':
                 return <View style={[styles.divider, { backgroundColor: colors.inputBorder }, style]} />;
@@ -195,6 +229,48 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
                             </React.Fragment>
                         ))}
                     </View>
+                );
+            }
+
+            case 'flatList': {
+                // Virtualized list: only items near the screen are rendered (good for long/API lists)
+                const items: any[] = Array.isArray(props.items) ? props.items : [];
+                const horizontal = !!props.horizontal;
+                const direction: ScrollDirection = horizontal ? 'horizontal' : 'vertical';
+                const numColumns = !horizontal && Number(props.numColumns) > 1 ? Number(props.numColumns) : undefined;
+                const keyField = props.keyField ?? 'id';
+                const { outer, content: contentStyle } = splitListStyle(style);
+
+                return (
+                    <FlatList
+                        // numColumns can't change on the fly, so remount when it does
+                        key={`columns-${numColumns ?? 1}`}
+                        data={items}
+                        horizontal={horizontal}
+                        numColumns={numColumns}
+                        keyExtractor={(item, index) => String(item?.[keyField] ?? index)}
+                        // Re-render items when state changes (bindings like {{state.*}})
+                        extraData={scope}
+                        // Same direction as the parent scroll: let the parent scroll instead
+                        scrollEnabled={parentScroll !== direction}
+                        showsHorizontalScrollIndicator={!!props.showsIndicator}
+                        showsVerticalScrollIndicator={!!props.showsIndicator}
+                        keyboardShouldPersistTaps="handled"
+                        initialNumToRender={props.initialNumToRender ?? 10}
+                        style={outer}
+                        contentContainerStyle={contentStyle}
+                        columnWrapperStyle={numColumns && contentStyle.gap ? { gap: contentStyle.gap } : undefined}
+                        ListEmptyComponent={
+                            props.emptyText
+                                ? <TextComp isDynamic text={String(props.emptyText)} style={styles.emptyText} />
+                                : null
+                        }
+                        renderItem={({ item, index }) => (
+                            <ScrollDirectionContext.Provider value={direction}>
+                                {renderChildren({ ...scope, item, index })}
+                            </ScrollDirectionContext.Provider>
+                        )}
+                    />
                 );
             }
 
@@ -219,8 +295,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        width: '100%',
-        height: moderateScale(160),
         backgroundColor: 'rgba(128,128,128,0.2)',
     },
     card: {
@@ -257,6 +331,11 @@ const styles = StyleSheet.create({
     },
     optionTextSelected: {
         color: commonColors.white,
+    },
+    emptyText: {
+        textAlign: 'center',
+        opacity: 0.6,
+        padding: moderateScale(16),
     },
     pressed: {
         opacity: 0.6,

@@ -26,6 +26,16 @@
             { "id": "s2", "label": "Dimensions", "value": "42" },
             { "id": "s3", "label": "Portals", "value": "9k" }
         ],
+        "characters": [
+            { "id": "c1", "name": "Rick Sanchez", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg" },
+            { "id": "c2", "name": "Morty Smith", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/2.jpeg" },
+            { "id": "c3", "name": "Summer Smith", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/3.jpeg" },
+            { "id": "c4", "name": "Beth Smith", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/4.jpeg" },
+            { "id": "c5", "name": "Jerry Smith", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/5.jpeg" },
+            { "id": "c6", "name": "Abadango Princess", "status": "Alive", "image": "https://rickandmortyapi.com/api/character/avatar/6.jpeg" },
+            { "id": "c7", "name": "Abradolf Lincler", "status": "unknown", "image": "https://rickandmortyapi.com/api/character/avatar/7.jpeg" },
+            { "id": "c8", "name": "Adjudicator Rick", "status": "Dead", "image": "https://rickandmortyapi.com/api/character/avatar/8.jpeg" }
+        ],
         "menu": [
             { "id": "m1", "title": "Settings", "route": "Settings" },
             { "id": "m2", "title": "Characters", "route": "Home" }
@@ -96,6 +106,37 @@
                         "children": [
                             { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "$primary" } },
                             { "type": "text", "props": { "text": "{{item.label}}" }, "style": { "fontSize": 12, "color": "$textSecondary" } }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "column",
+                "style": { "gap": 8 },
+                "children": [
+                    { "type": "text", "props": { "text": "Characters (FlatList)" }, "style": { "font": "bold", "fontSize": 16 } },
+                    {
+                        "type": "flatList",
+                        "props": { "items": "{{data.characters}}", "numColumns": 2, "emptyText": "No characters" },
+                        "style": { "gap": 12, "paddingVertical": 4, "paddingHorizontal": 2 },
+                        "children": [
+                            {
+                                "type": "card",
+                                "animation": { "enter": "fadeInUp", "delay": 400, "stagger": 80 },
+                                "style": { "flex": 1, "padding": 0, "overflow": "hidden" },
+                                "action": { "type": "copy", "text": "{{item.name}}" },
+                                "children": [
+                                    { "type": "image", "props": { "uri": "{{item.image}}" }, "style": { "height": 150 } },
+                                    {
+                                        "type": "column",
+                                        "style": { "padding": 8, "gap": 2 },
+                                        "children": [
+                                            { "type": "text", "props": { "text": "{{item.name}}", "numberOfLines": 1 }, "style": { "font": "semiBold", "fontSize": 13 } },
+                                            { "type": "text", "props": { "text": "{{item.status}}" }, "style": { "fontSize": 11, "color": "$textSecondary" } }
+                                        ]
+                                    }
+                                ]
+                            }
                         ]
                     }
                 ]

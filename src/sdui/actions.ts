@@ -2,7 +2,7 @@
  * @file actions.ts
  * @description Runs the `action` attached to an SDUI node when the user taps it.
  */
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { t } from 'i18next';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
@@ -55,6 +55,12 @@ export interface ActionRuntime {
 }
 
 /**
+ * API actions that are currently running. Keyed by the action object from the JSON,
+ * so a second tap on the same button is ignored until the first request finishes.
+ */
+const runningApiActions = new WeakSet<object>();
+
+/**
  * Executes an action. Bindings (e.g. `{{item.route}}`) are resolved first.
  * Unknown action types are ignored with a warning, so old app versions don't crash.
  */
@@ -75,6 +81,11 @@ export const runAction = async (action: SduiAction, { scope, navigation, setStat
             case 'api': {
                 const { method = 'post', url, body, resultKey, loadingKey, errorKey, validate } = resolved;
 
+                // Ignore repeated taps while this request is still running
+                if (runningApiActions.has(action)) break;
+
+                Keyboard.dismiss();
+
                 const validationError = validateState(validate, scope.state);
                 if (validationError) {
                     if (errorKey) setState(errorKey, validationError);
@@ -82,6 +93,7 @@ export const runAction = async (action: SduiAction, { scope, navigation, setStat
                     break;
                 }
 
+                runningApiActions.add(action);
                 if (loadingKey) setState(loadingKey, true);
                 if (errorKey) setState(errorKey, null);
 
@@ -93,6 +105,7 @@ export const runAction = async (action: SduiAction, { scope, navigation, setStat
                     console.log(`SDUI api ${method.toUpperCase()} ${url} failed:`, error);
                     if (errorKey) setState(errorKey, error?.message ?? t('SOMETHING_WENT_WRONG'));
                 } finally {
+                    runningApiActions.delete(action);
                     if (loadingKey) setState(loadingKey, false);
                 }
                 break;

@@ -1,12 +1,12 @@
 //import libraries
 import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import useRTLStyles from './styles';
 import useIsRTL from '@/hooks/useIsRTL';
 import WrapperContainer from '@/components/WrapperContainer';
 import HeaderComp from '@/components/HeaderComp';
 import profileScreen from '@/sdui/screens/profile.json';
-import SduiRenderer, { SduiNode } from '@/sdui/SduiRenderer';
+import SduiRenderer, { SduiNode, SduiScrollProvider } from '@/sdui/SduiRenderer';
 
 /**
  * SDUI practice screen. Render the server driven UI inside the content view.
@@ -21,16 +21,36 @@ const Sdui = () => {
         setState(prev => ({ ...prev, [key]: value }));
     };
 
+    const root = profileScreen.root as SduiNode;
+    const content = (
+        <SduiRenderer
+            node={root}
+            scope={{ data: profileScreen.data, state }}
+            setState={setStateValue}
+        />
+    );
+
     return (
         <WrapperContainer style={styles.container} edges={['top']}>
             <HeaderComp showBack={false} title={profileScreen.title} />
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                <SduiRenderer
-                    node={profileScreen.root as SduiNode}
-                    scope={{ data: profileScreen.data, state }}
-                    setState={setStateValue}
-                />
-            </ScrollView>
+            <KeyboardAvoidingView
+                style={styles.content}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            >
+                {root.type === 'flatList' ? (
+                    // A list root scrolls the whole screen itself (fully virtualized)
+                    content
+                ) : (
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        // First tap on a button works even while the keyboard is open
+                        keyboardShouldPersistTaps="handled"
+                        keyboardDismissMode="on-drag"
+                    >
+                        <SduiScrollProvider value="vertical">{content}</SduiScrollProvider>
+                    </ScrollView>
+                )}
+            </KeyboardAvoidingView>
         </WrapperContainer>
     );
 };
