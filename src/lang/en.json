@@ -40,5 +40,8 @@
     "LIGHT": "Light",
     "DARK": "Dark",
     "LOGOUT": "Logout",
-    "PROFILE": "Profile"
+    "PROFILE": "Profile",
+    "Sdui": "SDUI",
+    "SDUI": "SDUI",
+    "COPIED": "Copied to clipboard"
 }

@@ -1,10 +1,15 @@
 {
     "id": "profile",
     "schemaVersion": 1,
-    "title": "PROFILE",
+    "title": "Diwali EOSS",
     "showHeader": true,
     "showBack": false,
     "refreshable": true,
+    "state": {
+        "user": null,
+        "loading": false,
+        "error": null
+    },
     "data": {
         "user": {
             "name": "Rick Sanchez",
@@ -17,7 +22,7 @@
             { "id": "s3", "label": "Portals", "value": "9k" }
         ],
         "menu": [
-            { "id": "m1", "title": "About this screen", "screenId": "about" },
+            { "id": "m1", "title": "Settings", "route": "Settings" },
             { "id": "m2", "title": "Characters", "route": "Home" }
         ]
     },
@@ -54,6 +59,55 @@
                         "children": [
                             { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "$primary" } },
                             { "type": "text", "props": { "text": "{{item.label}}" }, "style": { "fontSize": 12, "color": "$textSecondary" } }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "card",
+                "style": { "gap": 12 },
+                "children": [
+                    { "type": "text", "props": { "text": "POST API demo" }, "style": { "font": "bold", "fontSize": 16 } },
+                    { "type": "text", "props": { "text": "POST https://dummyjson.com/auth/login" }, "style": { "fontSize": 12, "color": "$textSecondary" } },
+                    {
+                        "type": "button",
+                        "props": { "title": "Get user detail", "disabled": "{{state.loading}}" },
+                        "action": {
+                            "type": "api",
+                            "method": "post",
+                            "url": "https://dummyjson.com/auth/login",
+                            "body": { "username": "emilys", "password": "emilyspass", "expiresInMins": 30 },
+                            "resultKey": "user",
+                            "loadingKey": "loading",
+                            "errorKey": "error"
+                        }
+                    },
+                    { "type": "text", "visibleIf": "state.loading", "props": { "text": "Loading..." }, "style": { "color": "$textSecondary" } },
+                    { "type": "text", "visibleIf": "state.error", "props": { "text": "{{state.error}}" }, "style": { "color": "$error" } },
+                    {
+                        "type": "column",
+                        "visibleIf": "state.user",
+                        "style": { "gap": 8 },
+                        "children": [
+                            {
+                                "type": "row",
+                                "style": { "gap": 12 },
+                                "children": [
+                                    { "type": "image", "props": { "uri": "{{state.user.image}}" }, "style": { "width": 56, "height": 56, "borderRadius": 28 } },
+                                    {
+                                        "type": "column",
+                                        "style": { "flex": 1, "gap": 2 },
+                                        "children": [
+                                            { "type": "text", "props": { "text": "{{state.user.firstName}} {{state.user.lastName}}" }, "style": { "font": "bold", "fontSize": 16 } },
+                                            { "type": "text", "props": { "text": "@{{state.user.username}}" }, "style": { "color": "$textSecondary" } }
+                                        ]
+                                    }
+                                ]
+                            },
+                            { "type": "divider" },
+                            { "type": "text", "props": { "text": "ID: {{state.user.id}}" } },
+                            { "type": "text", "props": { "text": "Email: {{state.user.email}}" } },
+                            { "type": "text", "props": { "text": "Gender: {{state.user.gender}}" } }
                         ]
                     }
                 ]

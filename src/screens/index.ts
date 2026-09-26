@@ -7,3 +7,4 @@ export { default as OTPVerification } from './auth/OTPVerification/OTPVerificati
 export { default as Home } from '@/screens/main/Home/Home';
 export { default as Profile } from '@/screens/main/Profile/Profile';
 export { default as Settings } from '@/screens/main/Settings/Settings';
+export { default as Sdui } from '@/screens/main/Sdui/Sdui';

@@ -15,5 +15,6 @@ export type AuthStackParamList = {
 export type MainStackParamList = {
   Home: undefined;
   Profile: undefined;
+  Sdui: undefined;
   Settings: undefined;
 }; 

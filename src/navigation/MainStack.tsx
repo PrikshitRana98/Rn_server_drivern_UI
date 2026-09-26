@@ -1,7 +1,8 @@
-import { HomeIcon, HomeInactiveIcon, ProfileInactiveIcon, SettingsIcon } from '@/assets/icons';
+import { EyeIcon, HomeIcon, HomeInactiveIcon, ProfileInactiveIcon, SettingsIcon } from '@/assets/icons';
 import {
   Home,
   Profile,
+  Sdui,
   Settings
 } from '@/screens';
 import { Colors } from '@/styles/colors';
@@ -51,6 +52,11 @@ export const MainStack = () => {
         tabBarIcon: ({ color, focused }) => (
           focused ? <ProfileInactiveIcon color={color} /> : <ProfileInactiveIcon color={color} />
         ),
+      }} />
+      <Tab.Screen name="Sdui" component={Sdui} options={{
+        tabBarIcon: () => (
+          <EyeIcon fill={colors.text} width={20} height={20} />
+        )
       }} />
       <Tab.Screen name="Settings" component={Settings} options={{
         tabBarIcon: ({ color }) => (
