@@ -6,6 +6,7 @@ import AuthStack from './AuthStack';
 import { MainStack } from './MainStack';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { Sales } from '@/screens';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,7 +18,10 @@ export const Routes = () => {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }} id={undefined}>
                 {isFirstTime ? (
-                    <Stack.Screen name="Main" component={MainStack} />
+                    <>
+                        <Stack.Screen name="Main" component={MainStack} />
+                        <Stack.Screen name="Sales" component={Sales} />
+                    </>
                 ) : (
                     <Stack.Screen name="Auth" component={AuthStack} />
                 )}

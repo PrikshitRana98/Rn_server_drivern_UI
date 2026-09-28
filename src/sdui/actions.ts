@@ -13,6 +13,10 @@ import { resolveDeep, SduiScope } from './binding';
 export type SduiAction =
     | { type: 'navigate'; screen: string; params?: Record<string, any> }
     | { type: 'copy'; text: string }
+    /** Writes a value into screen state, e.g. `{ "key": "showCoupon", "value": true }` opens a modal */
+    | { type: 'setState'; key: string; value: any }
+    /** Runs actions one after another, e.g. copy a code and then close the modal */
+    | { type: 'sequence'; actions: SduiAction[] }
     /**
      * Calls an API. The response is saved in `state[resultKey]`, so the JSON can show it
      * with `{{state.<resultKey>.*}}`. `loadingKey` is true while the request runs and
@@ -76,6 +80,18 @@ export const runAction = async (action: SduiAction, { scope, navigation, setStat
             case 'copy':
                 await Clipboard.setStringAsync(String(resolved.text ?? ''));
                 Alert.alert(t('COPIED'));
+                break;
+
+            case 'setState':
+                if (resolved.key) setState(resolved.key, resolved.value);
+                break;
+
+            case 'sequence':
+                // Run the original (unresolved) actions so each one resolves its own bindings
+                // and the api double-tap guard still recognises them
+                for (const child of (action as Extract<SduiAction, { type: 'sequence' }>).actions ?? []) {
+                    await runAction(child, { scope, navigation, setState });
+                }
                 break;
 
             case 'api': {

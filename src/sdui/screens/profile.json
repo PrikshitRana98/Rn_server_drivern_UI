@@ -49,6 +49,7 @@
                 "type": "card",
                 "animation": { "enter": "zoomIn", "duration": 300, "spring": true },
                 "style": { "backgroundColor": "$secondary", "padding": 20, "gap": 6 },
+                "action": { "type": "navigate", "screen": "Sales" },
                 "children": [
                     {
                         "type": "row",
@@ -305,7 +306,7 @@
                             "elevation": 6
                         },
                         "textStyle": { "color": "$white", "font": "bold", "fontSize": 15 },
-                        "action": { "type": "navigate", "screen": "Home" }
+                        "action": { "type": "navigate", "screen": "Sales" }
                     },
                     {
                         "type": "button",

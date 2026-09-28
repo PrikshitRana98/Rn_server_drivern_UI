@@ -8,6 +8,7 @@ import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useNavigation } from '@react-navigation/native';
 import ButtonComp from '@/components/ButtonComp';
+import ModalComp from '@/components/ModalComp';
 import TextComp from '@/components/TextComp';
 import TextInputComp from '@/components/TextInputComp';
 import { useTheme } from '@/context/ThemeContext';
@@ -274,6 +275,26 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
                 );
             }
 
+            case 'modal': {
+                // Open while state[bind] is truthy; backdrop / Android back set it to false
+                const close = () => props.bind && setState(props.bind, false);
+                return (
+                    <ModalComp
+                        isVisible={!!scope.state?.[props.bind]}
+                        onClose={close}
+                        position={props.variant === 'center' ? 'center' : 'bottom'}
+                        closeOnBackdrop={props.dismissible !== false}
+                        avoidKeyboard
+                        containerStyle={style}
+                    >
+                        {/* Modal content is outside the page scroll, so lists inside can scroll */}
+                        <ScrollDirectionContext.Provider value={null}>
+                            {renderChildren()}
+                        </ScrollDirectionContext.Provider>
+                    </ModalComp>
+                );
+            }
+
             default:
                 if (__DEV__) console.warn('SDUI: unknown component', node.type);
                 return null;
@@ -281,7 +302,8 @@ const SduiRenderer = ({ node, scope = {}, setState = () => { } }: SduiRendererPr
     };
 
     const content = renderContent();
-    if (!node.animation || !content) return content;
+    // A modal animates itself and takes no space in the layout, so it is never wrapped
+    if (!node.animation || !content || node.type === 'modal') return content;
 
     return (
         <SduiAnimated animation={node.animation} index={scope.index} style={wrapperStyle}>

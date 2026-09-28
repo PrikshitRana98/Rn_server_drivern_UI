@@ -16,6 +16,12 @@ interface ModalCompProps {
     backdropTransitionOutTiming?: number;
     animationInTiming?: number;
     animationOutTiming?: number;
+    /** `bottom` = bottom sheet with a handle (default), `center` = dialog in the middle */
+    position?: 'bottom' | 'center';
+    /** Close when the dark backdrop is tapped. Defaults to true */
+    closeOnBackdrop?: boolean;
+    /** Move the modal up when the keyboard opens */
+    avoidKeyboard?: boolean;
 }
 
 const ModalComp: React.FC<ModalCompProps> = ({
@@ -24,19 +30,23 @@ const ModalComp: React.FC<ModalCompProps> = ({
     children,
     containerStyle,
     backdropOpacity = 0.5,
-    animationIn = 'slideInUp',
-    animationOut = 'slideOutDown',
+    position = 'bottom',
+    animationIn = position === 'center' ? 'zoomIn' : 'slideInUp',
+    animationOut = position === 'center' ? 'zoomOut' : 'slideOutDown',
     backdropTransitionOutTiming = 300,
     animationInTiming = 300,
     animationOutTiming = 300,
+    closeOnBackdrop = true,
+    avoidKeyboard = false,
 }) => {
     const { theme } = useTheme();
     const styles = useStyles(theme);
+    const isCenter = position === 'center';
 
     return (
         <Modal
             isVisible={isVisible}
-            onBackdropPress={onClose}
+            onBackdropPress={closeOnBackdrop ? onClose : undefined}
             onBackButtonPress={onClose}
             backdropOpacity={backdropOpacity}
             animationIn={animationIn as any}
@@ -45,11 +55,12 @@ const ModalComp: React.FC<ModalCompProps> = ({
             animationInTiming={animationInTiming}
             animationOutTiming={animationOutTiming}
             useNativeDriver
-            style={styles.modal}
+            avoidKeyboard={avoidKeyboard}
+            style={isCenter ? styles.modalCenter : styles.modal}
             statusBarTranslucent
         >
-            <View style={[styles.container, containerStyle]}>
-                <View style={styles.handle} />
+            <View style={[styles.container, isCenter && styles.containerCenter, containerStyle]}>
+                {!isCenter && <View style={styles.handle} />}
                 {children}
             </View>
         </Modal>
@@ -63,6 +74,18 @@ const useStyles = (theme: ThemeType) => {
         modal: {
             margin: 0,
             justifyContent: 'flex-end',
+        },
+        modalCenter: {
+            margin: moderateScale(24),
+            justifyContent: 'center',
+        },
+        containerCenter: {
+            borderRadius: moderateScale(20),
+            paddingTop: moderateScale(20),
+            shadowOffset: {
+                width: 0,
+                height: 4,
+            },
         },
         container: {
             backgroundColor: colors.background,

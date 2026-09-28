@@ -1,0 +1,388 @@
+{
+    "id": "sales",
+    "schemaVersion": 1,
+    "title": "EOSS Sale",
+    "showHeader": true,
+    "showBack": true,
+    "state": {
+        "showCouponModal": false,
+        "showOfferSheet": false,
+        "selectedOffer": null
+    },
+    "data": {
+        "hero": {
+            "tag": "END OF SEASON SALE",
+            "headline": "Up to 80% OFF",
+            "subtitle": "On 10,000+ top styles, gadgets & home picks",
+            "endsOn": "Sale ends 30 Sep, 11:59 PM"
+        },
+        "countdown": [
+            { "id": "days", "value": "02", "label": "Days" },
+            { "id": "hours", "value": "14", "label": "Hrs" },
+            { "id": "mins", "value": "36", "label": "Min" }
+        ],
+        "offers": [
+            { "id": "o1", "icon": "💳", "title": "10% Instant Discount", "subtitle": "On credit cards, min ₹3,000", "terms": ["Valid on credit cards only", "Minimum order value ₹3,000", "Max discount ₹1,500 per card"] },
+            { "id": "o2", "icon": "🚚", "title": "Free Delivery", "subtitle": "On all orders above ₹499", "terms": ["Applicable on orders above ₹499", "Not valid on large appliances", "Delivered in 3-5 days"] },
+            { "id": "o3", "icon": "📅", "title": "No Cost EMI", "subtitle": "Up to 12 months on ₹10,000+", "terms": ["Available on orders ₹10,000+", "Tenure 3, 6, 9 or 12 months", "Interest charged by bank is refunded"] },
+            { "id": "o4", "icon": "🎁", "title": "Extra ₹200 OFF", "subtitle": "On your first sale order" }
+        ],
+        "categories": [
+            { "id": "k1", "label": "Mobiles", "image": "https://cdn.dummyjson.com/product-images/smartphones/iphone-6/thumbnail.webp", "terms": ["Only for your first sale order", "Applied automatically at checkout", "Cannot be combined with coupons"] },
+            { "id": "k2", "label": "Laptops", "image": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp" },
+            { "id": "k3", "label": "Fashion", "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/thumbnail.webp" },
+            { "id": "k4", "label": "Footwear", "image": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-baseball-cleats/thumbnail.webp" },
+            { "id": "k5", "label": "Watches", "image": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/thumbnail.webp" },
+            { "id": "k6", "label": "Beauty", "image": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp" },
+            { "id": "k7", "label": "Furniture", "image": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp" },
+            { "id": "k8", "label": "Eyewear", "image": "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/thumbnail.webp" }
+        ],
+        "deals": [
+            { "id": "d1", "title": "High-top Sneakers", "price": "4,499", "mrp": "12,995", "off": "65", "image": "https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/thumbnail.webp" },
+            { "id": "d2", "title": "Leather Strap Watch", "price": "1,299", "mrp": "4,999", "off": "74", "image": "https://cdn.dummyjson.com/product-images/mens-watches/brown-leather-belt-watch/thumbnail.webp" },
+            { "id": "d3", "title": "Classic Sunglasses", "price": "599", "mrp": "2,499", "off": "76", "image": "https://cdn.dummyjson.com/product-images/sunglasses/classic-sun-glasses/thumbnail.webp" },
+            { "id": "d4", "title": "Everyday Fragrance", "price": "1,899", "mrp": "4,500", "off": "58", "image": "https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp" },
+            { "id": "d5", "title": "Family Photo Frame", "price": "349", "mrp": "999", "off": "65", "image": "https://cdn.dummyjson.com/product-images/home-decoration/family-tree-photo-frame/thumbnail.webp" },
+            { "id": "d6", "title": "Gaming T-shirt", "price": "399", "mrp": "1,299", "off": "69", "image": "https://cdn.dummyjson.com/product-images/mens-shirts/gigabyte-aorus-men-tshirt/thumbnail.webp" }
+        ],
+        "topPicks": [
+            { "id": "t1", "title": "Smartphone 64GB", "price": "8,999", "mrp": "15,999", "off": "43", "rating": "4.3", "image": "https://cdn.dummyjson.com/product-images/smartphones/iphone-5s/thumbnail.webp" },
+            { "id": "t2", "title": "Pro Laptop 14\"", "price": "89,990", "mrp": "1,19,900", "off": "25", "rating": "4.6", "image": "https://cdn.dummyjson.com/product-images/laptops/apple-macbook-pro-14-inch-space-grey/thumbnail.webp" },
+            { "id": "t3", "title": "Eyeshadow Palette", "price": "299", "mrp": "799", "off": "62", "rating": "4.1", "image": "https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp" },
+            { "id": "t4", "title": "3-Seater Sofa", "price": "24,999", "mrp": "54,999", "off": "54", "rating": "4.4", "image": "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp" },
+            { "id": "t5", "title": "Volume Mascara", "price": "199", "mrp": "499", "off": "60", "rating": "3.9", "image": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp" },
+            { "id": "t6", "title": "Dual Screen Laptop", "price": "74,990", "mrp": "99,990", "off": "25", "rating": "4.5", "image": "https://cdn.dummyjson.com/product-images/laptops/asus-zenbook-pro-dual-screen-laptop/thumbnail.webp" }
+        ],
+        "coupon": { "code": "EOSS10", "text": "Extra 10% OFF on orders above ₹1,999" }
+    },
+    "root": {
+        "type": "column",
+        "style": { "padding": 12, "gap": 16, "paddingBottom": 32 },
+        "children": [
+            {
+                "type": "card",
+                "animation": { "enter": "zoomIn", "duration": 500, "spring": true },
+                "style": { "backgroundColor": "#1E3A8A", "padding": 20, "gap": 8, "borderRadius": 16 },
+                "children": [
+                    {
+                        "type": "row",
+                        "style": { "justifyContent": "space-between" },
+                        "children": [
+                            { "type": "text", "props": { "text": "{{data.hero.tag}}" }, "style": { "font": "bold", "fontSize": 12, "letterSpacing": 1.5, "color": "#FFD814" } },
+                            {
+                                "type": "card",
+                                "animation": { "loop": "pulse", "loopDuration": 900 },
+                                "style": { "backgroundColor": "$secondary", "paddingVertical": 3, "paddingHorizontal": 10, "borderRadius": 12 },
+                                "children": [
+                                    { "type": "text", "props": { "text": "● LIVE" }, "style": { "font": "bold", "fontSize": 11, "color": "$white" } }
+                                ]
+                            }
+                        ]
+                    },
+                    { "type": "text", "props": { "text": "{{data.hero.headline}}" }, "style": { "font": "bold", "fontSize": 32, "lineHeight": 40, "color": "$white" } },
+                    { "type": "text", "props": { "text": "{{data.hero.subtitle}}" }, "style": { "fontSize": 13, "color": "$white", "opacity": 0.85 } },
+                    {
+                        "type": "list",
+                        "props": { "items": "{{data.countdown}}" },
+                        "style": { "flexDirection": "row", "gap": 8, "marginTop": 8 },
+                        "children": [
+                            {
+                                "type": "column",
+                                "style": { "backgroundColor": "#FFD814", "borderRadius": 8, "paddingVertical": 6, "paddingHorizontal": 12, "alignItems": "center" },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{item.value}}" }, "style": { "font": "bold", "fontSize": 18, "color": "#1E3A8A" } },
+                                    { "type": "text", "props": { "text": "{{item.label}}" }, "style": { "fontSize": 10, "color": "#1E3A8A" } }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "animation": { "loop": "blink", "loopDuration": 1600 },
+                        "props": { "text": "{{data.hero.endsOn}}" },
+                        "style": { "font": "medium", "fontSize": 12, "color": "#FFD814" }
+                    }
+                ]
+            },
+            {
+                "type": "flatList",
+                "props": { "items": "{{data.offers}}", "horizontal": true },
+                "style": { "gap": 10, "paddingHorizontal": 2, "paddingVertical": 2 },
+                "children": [
+                    {
+                        "type": "row",
+                        "animation": { "enter": "slideInRight", "delay": 200, "stagger": 80 },
+                        "style": { "width": 230, "gap": 10, "padding": 12, "borderRadius": 12, "borderWidth": 1, "borderColor": "$warning", "backgroundColor": "$surface" },
+                        "action": {
+                            "type": "sequence",
+                            "actions": [
+                                { "type": "setState", "key": "selectedOffer", "value": "{{item}}" },
+                                { "type": "setState", "key": "showOfferSheet", "value": true }
+                            ]
+                        },
+                        "children": [
+                            { "type": "text", "props": { "text": "{{item.icon}}" }, "style": { "fontSize": 24 } },
+                            {
+                                "type": "column",
+                                "style": { "flex": 1, "gap": 2 },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{item.title}}", "numberOfLines": 1 }, "style": { "font": "semiBold", "fontSize": 13 } },
+                                    { "type": "text", "props": { "text": "{{item.subtitle}}", "numberOfLines": 1 }, "style": { "fontSize": 11, "color": "$textSecondary" } }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "column",
+                "style": { "gap": 10 },
+                "children": [
+                    { "type": "text", "props": { "text": "Shop by Category" }, "style": { "font": "bold", "fontSize": 17 } },
+                    {
+                        "type": "flatList",
+                        "props": { "items": "{{data.categories}}", "numColumns": 4 },
+                        "style": { "gap": 12 },
+                        "children": [
+                            {
+                                "type": "column",
+                                "animation": { "enter": "zoomIn", "delay": 300, "stagger": 50 },
+                                "style": { "flex": 1, "alignItems": "center", "gap": 6 },
+                                "action": { "type": "navigate", "screen": "Main", "params": { "screen": "Home" } },
+                                "children": [
+                                    {
+                                        "type": "image",
+                                        "props": { "uri": "{{item.image}}", "contentFit": "contain" },
+                                        "style": { "width": 64, "height": 64, "borderRadius": 32, "backgroundColor": "#F1F3F6" }
+                                    },
+                                    { "type": "text", "props": { "text": "{{item.label}}", "numberOfLines": 1 }, "style": { "font": "medium", "fontSize": 11 } }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "column",
+                "style": { "gap": 10 },
+                "children": [
+                    {
+                        "type": "row",
+                        "style": { "justifyContent": "space-between" },
+                        "children": [
+                            { "type": "text", "props": { "text": "⚡ Deals of the Day" }, "style": { "font": "bold", "fontSize": 17 } },
+                            {
+                                "type": "text",
+                                "animation": { "loop": "blink", "loopDuration": 1200 },
+                                "props": { "text": "Ends in 05:42:10" },
+                                "style": { "font": "semiBold", "fontSize": 12, "color": "$secondary" }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "flatList",
+                        "props": { "items": "{{data.deals}}", "horizontal": true },
+                        "style": { "gap": 12, "paddingHorizontal": 2, "paddingVertical": 4 },
+                        "children": [
+                            {
+                                "type": "card",
+                                "animation": { "enter": "fadeInUp", "delay": 400, "stagger": 90, "spring": true },
+                                "style": { "width": 150, "padding": 0, "overflow": "hidden" },
+                                "action": { "type": "copy", "text": "{{item.title}}" },
+                                "children": [
+                                    {
+                                        "type": "image",
+                                        "props": { "uri": "{{item.image}}", "contentFit": "contain" },
+                                        "style": { "height": 130, "backgroundColor": "#FFFFFF" }
+                                    },
+                                    {
+                                        "type": "column",
+                                        "style": { "padding": 10, "gap": 4 },
+                                        "children": [
+                                            { "type": "text", "props": { "text": "{{item.title}}", "numberOfLines": 1 }, "style": { "font": "medium", "fontSize": 13 } },
+                                            {
+                                                "type": "row",
+                                                "style": { "gap": 6 },
+                                                "children": [
+                                                    { "type": "text", "props": { "text": "₹{{item.price}}" }, "style": { "font": "bold", "fontSize": 15 } },
+                                                    { "type": "text", "props": { "text": "₹{{item.mrp}}" }, "style": { "fontSize": 11, "color": "$textSecondary", "textDecorationLine": "line-through" } }
+                                                ]
+                                            },
+                                            { "type": "text", "props": { "text": "{{item.off}}% off" }, "style": { "font": "bold", "fontSize": 12, "color": "$primary" } }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "card",
+                "animation": { "enter": "fadeInDown", "delay": 500 },
+                "style": { "backgroundColor": "$secondary", "padding": 16, "gap": 6, "borderRadius": 14 },
+                "action": { "type": "setState", "key": "showCouponModal", "value": true },
+                "children": [
+                    { "type": "text", "props": { "text": "🔥 {{data.coupon.text}}" }, "style": { "font": "bold", "fontSize": 15, "color": "$white" } },
+                    {
+                        "type": "row",
+                        "style": { "gap": 8 },
+                        "children": [
+                            { "type": "text", "props": { "text": "Use code" }, "style": { "fontSize": 12, "color": "$white" } },
+                            {
+                                "type": "card",
+                                "animation": { "loop": "pulse", "loopDuration": 1400 },
+                                "style": { "backgroundColor": "$white", "paddingVertical": 3, "paddingHorizontal": 10, "borderRadius": 6 },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{data.coupon.code}}" }, "style": { "font": "bold", "fontSize": 12, "letterSpacing": 1, "color": "$secondary" } }
+                                ]
+                            },
+                            { "type": "text", "props": { "text": "· Tap to unlock" }, "style": { "fontSize": 11, "color": "$white", "opacity": 0.85 } }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "column",
+                "style": { "gap": 10 },
+                "children": [
+                    { "type": "text", "props": { "text": "Top Picks for You" }, "style": { "font": "bold", "fontSize": 17 } },
+                    {
+                        "type": "flatList",
+                        "props": { "items": "{{data.topPicks}}", "numColumns": 2 },
+                        "style": { "gap": 12, "paddingHorizontal": 2 },
+                        "children": [
+                            {
+                                "type": "card",
+                                "animation": { "enter": "fadeInUp", "delay": 600, "stagger": 80 },
+                                "style": { "flex": 1, "padding": 0, "overflow": "hidden" },
+                                "action": { "type": "copy", "text": "{{item.title}}" },
+                                "children": [
+                                    {
+                                        "type": "image",
+                                        "props": { "uri": "{{item.image}}", "contentFit": "contain" },
+                                        "style": { "height": 140, "backgroundColor": "#FFFFFF" }
+                                    },
+                                    {
+                                        "type": "column",
+                                        "style": { "padding": 10, "gap": 4 },
+                                        "children": [
+                                            { "type": "text", "props": { "text": "{{item.title}}", "numberOfLines": 1 }, "style": { "font": "medium", "fontSize": 13 } },
+                                            {
+                                                "type": "row",
+                                                "style": { "gap": 6 },
+                                                "children": [
+                                                    {
+                                                        "type": "card",
+                                                        "style": { "backgroundColor": "$primary", "paddingVertical": 2, "paddingHorizontal": 6, "borderRadius": 4 },
+                                                        "children": [
+                                                            { "type": "text", "props": { "text": "{{item.rating}} ★" }, "style": { "font": "bold", "fontSize": 11, "color": "$white" } }
+                                                        ]
+                                                    },
+                                                    { "type": "text", "props": { "text": "{{item.off}}% off" }, "style": { "font": "bold", "fontSize": 12, "color": "$primary" } }
+                                                ]
+                                            },
+                                            {
+                                                "type": "row",
+                                                "style": { "gap": 6 },
+                                                "children": [
+                                                    { "type": "text", "props": { "text": "₹{{item.price}}" }, "style": { "font": "bold", "fontSize": 15 } },
+                                                    { "type": "text", "props": { "text": "₹{{item.mrp}}" }, "style": { "fontSize": 11, "color": "$textSecondary", "textDecorationLine": "line-through" } }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "button",
+                "animation": { "enter": "fadeInUp", "delay": 700 },
+                "props": { "title": "Continue Shopping" },
+                "style": { "backgroundColor": "#FFD814", "borderColor": "#FFD814", "borderRadius": 24, "height": 50 },
+                "textStyle": { "color": "#1E3A8A", "font": "bold", "fontSize": 16 },
+                "action": { "type": "navigate", "screen": "Main", "params": { "screen": "Home" } }
+            },
+            { "type": "text", "props": { "text": "*T&C apply. Offers valid till stocks last." }, "style": { "fontSize": 10, "color": "$textSecondary", "textAlign": "center" } },
+            {
+                "type": "modal",
+                "props": { "bind": "showCouponModal", "variant": "center" },
+                "style": { "alignItems": "center", "gap": 10 },
+                "children": [
+                    { "type": "text", "props": { "text": "🎉" }, "style": { "fontSize": 44, "lineHeight": 52 } },
+                    { "type": "text", "props": { "text": "Coupon Unlocked!" }, "style": { "font": "bold", "fontSize": 20, "textAlign": "center" } },
+                    { "type": "text", "props": { "text": "{{data.coupon.text}}" }, "style": { "fontSize": 13, "color": "$textSecondary", "textAlign": "center" } },
+                    {
+                        "type": "column",
+                        "style": { "borderWidth": 2, "borderStyle": "dashed", "borderColor": "$secondary", "borderRadius": 10, "paddingVertical": 10, "paddingHorizontal": 24, "marginVertical": 6 },
+                        "children": [
+                            { "type": "text", "props": { "text": "{{data.coupon.code}}" }, "style": { "font": "bold", "fontSize": 22, "letterSpacing": 3, "color": "$secondary" } }
+                        ]
+                    },
+                    {
+                        "type": "row",
+                        "style": { "gap": 10, "width": "100%" },
+                        "children": [
+                            {
+                                "type": "button",
+                                "props": { "title": "Close" },
+                                "style": { "flex": 1, "width": "auto", "backgroundColor": "$transparent", "borderColor": "$textSecondary" },
+                                "textStyle": { "color": "$text" },
+                                "action": { "type": "setState", "key": "showCouponModal", "value": false }
+                            },
+                            {
+                                "type": "button",
+                                "props": { "title": "Copy code" },
+                                "style": { "flex": 1, "width": "auto", "backgroundColor": "$secondary", "borderColor": "$secondary" },
+                                "textStyle": { "font": "bold" },
+                                "action": { "type": "copy", "text": "{{data.coupon.code}}" }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "modal",
+                "props": { "bind": "showOfferSheet", "variant": "bottomSheet" },
+                "style": { "gap": 12, "paddingBottom": 36 },
+                "children": [
+                    {
+                        "type": "row",
+                        "style": { "gap": 12 },
+                        "children": [
+                            { "type": "text", "props": { "text": "{{state.selectedOffer.icon}}" }, "style": { "fontSize": 34, "lineHeight": 42 } },
+                            {
+                                "type": "column",
+                                "style": { "flex": 1, "gap": 2 },
+                                "children": [
+                                    { "type": "text", "props": { "text": "{{state.selectedOffer.title}}" }, "style": { "font": "bold", "fontSize": 18 } },
+                                    { "type": "text", "props": { "text": "{{state.selectedOffer.subtitle}}" }, "style": { "fontSize": 13, "color": "$textSecondary" } }
+                                ]
+                            }
+                        ]
+                    },
+                    { "type": "divider" },
+                    { "type": "text", "props": { "text": "Terms & Conditions" }, "style": { "font": "semiBold", "fontSize": 14 } },
+                    {
+                        "type": "list",
+                        "props": { "items": "{{state.selectedOffer.terms}}" },
+                        "style": { "gap": 6 },
+                        "children": [
+                            { "type": "text", "props": { "text": "• {{item}}" }, "style": { "fontSize": 13, "color": "$textSecondary" } }
+                        ]
+                    },
+                    {
+                        "type": "button",
+                        "props": { "title": "Got it" },
+                        "style": { "marginTop": 8, "borderRadius": 24 },
+                        "textStyle": { "font": "bold" },
+                        "action": { "type": "setState", "key": "showOfferSheet", "value": false }
+                    }
+                ]
+            }
+        ]
+    }
+}
